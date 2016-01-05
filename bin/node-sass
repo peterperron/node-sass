@@ -30,7 +30,7 @@ var cli = meow({
     '',
     'Options',
     '  -w, --watch                Watch a directory or file',
-    '  -r, --recursive            Recursively watch directories or files',
+    '  -r, --recursive, --update  Recursively watch directories or files',
     '  -o, --output               Output directory',
     '  -x, --omit-source-map-url  Omit source map URL comment from output',
     '  -i, --indented-syntax      Treat data from stdin as sass code (versus scss)',
@@ -81,6 +81,7 @@ var cli = meow({
     q: 'quiet',
     o: 'output',
     r: 'recursive',
+    update: 'recursive',  // Compatibility with ruby-sass
     x: 'omit-source-map-url',
     v: 'version',
     w: 'watch'
@@ -272,7 +273,8 @@ function run(options, emitter) {
 
   if (options.directory) {
     if (!options.output) {
-      emitter.emit('error', 'An output directory must be specified when compiling a directory');
+      options.output = options.directory;
+      // emitter.emit('error', 'An output directory must be specified when compiling a directory');
     }
     if (!isDirectory(options.output)) {
       emitter.emit('error', 'An output directory must be specified when compiling a directory');
